@@ -12,9 +12,7 @@ app.use(sqsRouter);
 
 const server = http.createServer(app);
 
-const wss = new WebSocket.Server({
-  server,
-});
+const wss = new WebSocket.Server({ server });
 
 export const clients = new Set<WebSocket>();
 
@@ -23,10 +21,16 @@ wss.on("connection", (ws) => {
   clients.add(ws);
 
   ws.on("close", () => {
-    console.log("Client disconnected from WebSocket server.");
-    clients.delete(ws);
+    try {
+      console.log("Client disconnected from WebSocket server.");
+      clients.delete(ws);
+      console.log("Client deleted from set");
+    } catch (err) {
+      console.log("err: " + err);
+    }
   });
 });
 import "./utils/redis-handler";
+import { log } from "console";
 
-app.listen(port, () => console.log("Server connected, port: ", port));
+server.listen(port, () => console.log("Server connected, port: ", port));

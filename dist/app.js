@@ -21,15 +21,9 @@ wss.on("connection", (ws) => {
     console.log("Client connected to WebSocket server.");
     exports.clients.add(ws);
     ws.on("close", () => {
-        try {
-            console.log("Client disconnected from WebSocket server.");
-            exports.clients.delete(ws);
-            console.log("Client deleted from set");
-        }
-        catch (err) {
-            console.log("err: " + err);
-        }
+        console.log("Client disconnected from WebSocket server.");
+        exports.clients.delete(ws);
     });
 });
 require("./utils/redis-handler");
-server.listen(port, () => console.log("Server connected, port: ", port));
+exports.default = app;
